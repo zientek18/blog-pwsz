@@ -1,0 +1,16 @@
+<main role="main" class="container">
+      <div class="starter-template">
+          {% if title %}
+          <h1>{{ title }}</h1>
+          {% else %}
+          <h1>Blog</h1>
+          {% endif %}
+
+          <p class="lead">
+                {% block content %}
+                    cosik
+                {% endblock content %}
+          </p>
+
+      </div>
+</main>

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="pt-2 pb-3">
+<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addPost">
+  Dodaj post
+</button>
+</div>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Tytuł</th>
+      <th scope="col">Operacje</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+{% for post in posts %}
+<tr>
+      <th scope="row">{{ post.id }}</th>
+      <td>{{ post.title }}</td>
+      <td>
+		  <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#{{ post.id }}">edytuj</button>
+		  <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remove-{{ post.id }}">usuń</button>
+	  </td>
+</tr>
+{% endfor %}
+
+
+  </tbody>
+</table>
+
+
+
+<!-- Dodaj post -->
+<form action="{{ url_for('addPost') }}" name="formAdd" method="post">
+	<div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Dodaj post</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+					<div class="form-group">
+						<label for="labelTitle">Tytuł:</label>
+						<input type=text name=title class="form-control" id="labelTitle">
+					  </div>
+
+					  <div class="form-group">
+						<label for="labelDescription">Opis:</label>
+						<textarea name=description class="form-control" id="labelDescription"></textarea>
+					  </div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+			<button type="submit" class="btn btn-primary">Dodaj</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+</form>
+
+
+{% for post in posts %}
+
+<form action="{{ url_for('removePost') }}" name="form-remove-{{ post.id }}" method="post">
+	<div class="modal fade" id="remove-{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="removePostModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="removePostModalLabel">Edytuj post</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+			  Czy na pewno usunąć post ?
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+			<input type=hidden name="id" value="{{ post.id }}">
+		  	<input type=hidden name="action" value="removePost">
+		  	<button type=submit class="btn btn-danger">Usuń</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+</form>
+
+
+<form action="{{ url_for('admin') }}" name="form-edit-{{ post.id }}" method="post">
+	<div class="modal fade" id="{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="editPostModalLabel">Edytuj post</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+					<div class="form-group">
+						<label for="labelTitle">Tytuł:</label>
+						<input type=text name=title class="form-control" id="labelTitle" value="{{ post.title }}">
+					  </div>
+
+					  <div class="form-group">
+						<label for="labelDescription">Opis:</label>
+						<textarea name=description class="form-control" id="labelDescription">{{ post.body }}</textarea>
+					  </div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+			<input type=hidden name="id" value="{{ post.id }}">
+		  	<input type=hidden name="action" value="editPost">
+		  	<button type=submit class="btn btn-primary">Zapisz</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+</form>
+
+
+
+{% endfor %}
+
+
+
+
+{% endblock %}
